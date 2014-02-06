@@ -60,6 +60,10 @@ describe APN::Notification do
     
     it 'should send the notifications in an Array' do
       
+      options = {:cert => configatron.apn.cert,
+                 :passphrase => configatron.apn.passphrase,
+                 :host => configatron.apn.host,
+                 :port => configatron.apn.port}      
       notifications = [NotificationFactory.create, NotificationFactory.create]
       notifications.each_with_index do |notify, i|
         notify.stub(:message_for_sending).and_return("message-#{i}")
@@ -72,7 +76,7 @@ describe APN::Notification do
       ssl_mock.should_receive(:write).with('message-1')
       APN::Connection.should_receive(:open_for_delivery).and_yield(ssl_mock, nil)
       
-      APN::Notification.send_notifications(notifications)
+      APN::Notification.send_notifications(options, notifications)
       
     end
     
