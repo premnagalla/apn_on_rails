@@ -4,7 +4,11 @@ namespace :apn do
     
     desc "Deliver all unsent APN notifications."
     task :deliver => [:environment] do
-      APN::Notification.send_notifications
+      options = {:cert => configatron.apn.cert,
+                 :passphrase => configatron.apn.passphrase,
+                 :host => configatron.apn.host,
+                 :port => configatron.apn.port}
+      APN::Notification.send_notifications(options)
     end
     
   end # notifications
